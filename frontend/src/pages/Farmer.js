@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useBatches } from '../BatchContext';
 
 function Farmer() {
   const navigate = useNavigate();
+  const { addBatch } = useBatches();
   const [form, setForm] = useState({ herbName: '', quantity: '', quantityType: 'kg', notes: '' });
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -144,7 +146,18 @@ function Farmer() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!photo) { alert('Please take or upload a photo!'); return; }
-    setSubmitted('ERVAS-' + Date.now());
+    const batchId = 'ERVAS-' + Date.now();
+    addBatch({
+      id: batchId,
+      herbName: form.herbName,
+      quantity: form.quantity,
+      quantityType: form.quantityType,
+      notes: form.notes,
+      location: location,
+      timestamp: new Date().toLocaleString(),
+      status: 'pending_processing'
+    });
+    setSubmitted(batchId);
   };
 
   const resetAll = () => {
