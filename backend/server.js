@@ -13,7 +13,9 @@ app.use(express.json());
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully!'))
   .catch((err) => console.log('MongoDB Error:', err));
-
+// Routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
 // Test route
 app.get('/', (req, res) => {
   res.send('ERVAS Backend is running!');
